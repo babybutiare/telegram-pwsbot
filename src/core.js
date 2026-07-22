@@ -1,10 +1,12 @@
-import TeleBot from 'node-telegram-bot-api';
+require('dotenv').config();
+process.env.NTBA_FIX_319 = '1';
+const TeleBot = require('node-telegram-bot-api');
 import helper from './utils/helper';
 import Lang from './utils/Lang';
 import blacklist from './model/BlackList';
 import Message from './model/Message';
 import re from './model/Re';
-const subs = new Message('subs');// 稿件
+const subs = new Message('subs');
 let config = require('dotenv').config().parsed;
 
 if (config.AutoMute) {
@@ -21,7 +23,7 @@ if (!config) {
   throw new Error(".env 配置文件中不存在Channel，请确保正确填写！")
 }
 
-const bot = new TeleBot(config.Token, {polling: true});
+const bot = new TeleBot(config.Token, {polling: true, Promise: global.Promise});
 
 // 保存机器人ID和UserName
 bot.getMe().then(info => { helper.updateConfig({BotID: info.id, BotUserName: info.username }) })
