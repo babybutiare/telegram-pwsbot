@@ -116,8 +116,12 @@ export default
       disable_web_page_preview: true,
       reply_markup: {
         resize_keyboard: true,
-        inline_keyboard: [[{text: lang.get('button_receive'), callback_data: `receive:${from}`},
-        {text: lang.get('button_reject'), callback_data: `reject:${from}`}]]
+        inline_keyboard: [[
+          {text: lang.get('button_receive'), callback_data: `receive:${from}`},
+          {text: lang.get('button_receive_nsfw'), callback_data: vars.REC_NSFW}
+        ], [
+          {text: lang.get('button_reject'), callback_data: `reject:${from}`}
+        ]]
       }
     });
     subs.update(condition, {actionMsgId: actionMsg.message_id});// 更新actionMsgId
@@ -133,9 +137,16 @@ export default
     let resp = null;
     let caption = subs.getCaption(message, params);
     let options = subs.getOptions(message, caption, params);
+    if (params && params.has_spoiler) {
+      options.has_spoiler = true;
+    }
     if (message.media_group_id) {
       message.media[0].caption = caption;
-      resp = await bot.sendMediaGroup(config.Channel, message.media);
+      if (params && params.has_spoiler) {
+        resp = await bot.sendMediaGroup(config.Channel, message.media.map(m => ({...m, has_spoiler: true})));
+      } else {
+        resp = await bot.sendMediaGroup(config.Channel, message.media);
+      }
     } else if (message.audio) {
       resp = await bot.sendAudio(config.Channel, message.audio.file_id, options);
     } else if (message.document) {
@@ -262,6 +273,18 @@ export default
     let condition = subs.getFwdMsgCondition(fwdMsg);// 得到查询条件
     let message = subs.one(condition);// 得到真实稿件
     this.receiveMessage(message, query.from);
+  },
+  /**
+   * 管理员点击采纳(NSFW)稿件(从actionMsg点击按钮)
+   * @param  {Object}  query callback data
+   * @return {Promise}       [description]
+   */
+  async receiveNsfw (query) {
+    console.log('receiveNsfw')
+    let fwdMsg = query.message.reply_to_message;
+    let condition = subs.getFwdMsgCondition(fwdMsg);
+    let message = subs.one(condition);
+    this.receiveMessage(message, query.from, { has_spoiler: true });
   },
   /**
    * 管理员点击退回稿件(从actionMsg点击按钮)

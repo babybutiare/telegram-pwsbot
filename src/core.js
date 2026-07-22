@@ -35,6 +35,7 @@ bot.getMe().then(info => { helper.updateConfig({BotID: info.id, BotUserName: inf
 const vars = {
     REC_ANY: 'receive:anonymous',
     REC_REAL: 'receive:real',
+    REC_NSFW: 'receive:nsfw',
     REJ_ANY: 'reject:anonymous',
     REJ_REAL: 'reject:real',
     SUB_ANY: 'submission_type:anonymous',

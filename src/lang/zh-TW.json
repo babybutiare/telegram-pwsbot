@@ -19,6 +19,7 @@
   "admin_reject_label": "已拒絕，理由:\n`{{reason}}`",
   "admin_reject": "操作人: [{{username}}](tg://user?id={{userid}})",
   "button_receive": "採用",
+  "button_receive_nsfw": "採用(NSFW)",
   "button_reject": "退回",
   "command_setgroup_tip": "已成功設定本群為審稿群！",
   "intro_new_group": "歡迎，使用 {{command}} 命令將此群設置為審稿群",
