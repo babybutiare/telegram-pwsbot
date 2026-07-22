@@ -95,7 +95,7 @@ onText(/\/no (.+)|\/no/, async ({ msg, match, rep, repMsg, chatId }) => {
  * @param  {[type]} ({   msg,          match,        rep, repMsg } [description]
  * @return {[type]}       [description]
  */
-onText(/\/re (.+)|\/re/, p => msgControl.replyMessageWithCommand(p, '/re'))
+// onText(/\/re (.+)|\/re/, p => msgControl.replyMessageWithCommand(p, '/re'))
 
 /**
  * 回复用户一些信息，但不进入对话模式
