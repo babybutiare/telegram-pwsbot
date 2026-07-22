@@ -14,16 +14,15 @@ export default
       if (this.isAdminReceiveAction(data)) { await msgControl.receive(query) } 
       else if (this.isAdminReceiveNsfwAction(data)) { await msgControl.receiveNsfw(query) }
       else if (this.isAdminRejectAction(data)) { await msgControl.reject(query) }
-      else { this.processSubmission(data, actionMsg) }
-      bot.answerCallbackQuery(query.id)
+      else { await this.processSubmission(data, actionMsg) }
+      bot.answerCallbackQuery(query.id).catch(err => console.error('answerCallbackQuery error:', err))
     } catch (err) {
       if (err.message == vars.BOT_NOAUTH_KICK) {
         err.message = lang.get('err_no_auth_kick')
       } else if (err.message == vars.BOT_NOAUTH) {
         err.message = lang.get('err_no_auth')
       }
-      bot.answerCallbackQuery(query.id, { text: err.message, show_alert: true })
-      throw err;
+      bot.answerCallbackQuery(query.id, { text: err.message, show_alert: true }).catch(err => console.error('answerCallbackQuery error:', err));
     }
   },
   /**
@@ -40,9 +39,9 @@ export default
       // 点击取消投稿
       return msgControl.editCurrentMessage(lang.get('sub_cancel_tip'), actionMsg);
     }
-    msgControl.editCurrentMessage(lang.get('sub_submit_tip'), actionMsg);
+    await msgControl.editCurrentMessage(lang.get('sub_submit_tip'), actionMsg);
     let resp = await msgControl.forwardMessage(message, type);// 转发到审稿群
-    msgControl.askAdmin(resp);// 询问管理员如何操作
+    await msgControl.askAdmin(resp);// 询问管理员如何操作
   },
   /**
    * 是管理员点击了采纳吗

@@ -20,7 +20,7 @@ export default
            bot.leaveChat(chatId);
         })
       }
-      bot.sendMessage(message.chat.id, lang.get('intro_new_group', {command: '/setgroup'}));
+      bot.sendMessage(message.chat.id, lang.get('intro_new_group', {command: '/setgroup'})).catch(err => console.error('sendMessage error:', err));
     } else if (helper.isPrivate(message)) {
       // 是私信渠道的投稿
       if (helper.isBlock(message, true)) { return false }
@@ -29,9 +29,9 @@ export default
         return re.end(message);
       } else if (re.has(message.from.id)) {
         // 进入会话模式，将用户之所有讯息转发到审稿群
-        bot.forwardMessage(config.Group, message.chat.id, message.message_id);// 转发至审稿群
+        bot.forwardMessage(config.Group, message.chat.id, message.message_id).catch(err => console.error('forwardMessage error:', err));// 转发至审稿群
       } else {
-        subs.process(message, (message) => { msgControl.subAsk(message) });
+        subs.process(message, (message) => { try { msgControl.subAsk(message) } catch (err) { console.error('subAsk error:', err) } });
       }
     }
   }

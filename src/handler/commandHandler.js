@@ -38,7 +38,7 @@ export default function (preg, cb)
         }
         msgControl.sendCurrentMessage(errText, msg, params);
       }
-      throw {err, msg};
+      console.error('command error:', err);
     }
   })
 }

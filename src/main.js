@@ -6,9 +6,9 @@ import msgHandler from './handler/msgHandler'
 // setting up the message handler
 bot.on('message', (message) => { msgHandler.process(message) });
 // set up the asynchronous callback handler
-bot.on('callback_query', (query) => { queryHandler.process(query) });
+bot.on('callback_query', (query) => { queryHandler.process(query).catch(err => console.error('callback_query error:', err)) });
 // setting error handler
-bot.on('polling_error', (error) => { throw error; });
+bot.on('polling_error', (error) => { console.error('polling_error:', error); });
 
 console.log("Server is running...");
 

@@ -272,7 +272,7 @@ export default
     let fwdMsg = query.message.reply_to_message;// 审稿群的稿件
     let condition = subs.getFwdMsgCondition(fwdMsg);// 得到查询条件
     let message = subs.one(condition);// 得到真实稿件
-    this.receiveMessage(message, query.from);
+    await this.receiveMessage(message, query.from);
   },
   /**
    * 管理员点击采纳(NSFW)稿件(从actionMsg点击按钮)
@@ -284,7 +284,7 @@ export default
     let fwdMsg = query.message.reply_to_message;
     let condition = subs.getFwdMsgCondition(fwdMsg);
     let message = subs.one(condition);
-    this.receiveMessage(message, query.from, { has_spoiler: true });
+    await this.receiveMessage(message, query.from, { has_spoiler: true });
   },
   /**
    * 管理员点击退回稿件(从actionMsg点击按钮)
@@ -297,6 +297,6 @@ export default
     let fwdMsg = query.message.reply_to_message;// 审稿群的稿件
     let condition = subs.getFwdMsgCondition(fwdMsg);// 得到查询条件
     let message = subs.one(condition);// 得到真实稿件
-    this.rejectMessage(message, query.from, reason);
+    await this.rejectMessage(message, query.from, reason);
   }
 }

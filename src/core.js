@@ -26,7 +26,7 @@ if (!config) {
 const bot = new TeleBot(config.Token, {polling: true, Promise: global.Promise});
 
 // 保存机器人ID和UserName
-bot.getMe().then(info => { helper.updateConfig({BotID: info.id, BotUserName: info.username }) })
+bot.getMe().then(info => { helper.updateConfig({BotID: info.id, BotUserName: info.username }) }).catch(err => console.error('getMe error:', err))
 
 /**
  * callback query data
