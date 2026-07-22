@@ -116,7 +116,8 @@ export default
       disable_web_page_preview: true,
       reply_markup: {
         resize_keyboard: true,
-        inline_keyboard: [[{text: lang.get('button_receive'), callback_data: `receive:${from}`}]]
+        inline_keyboard: [[{text: lang.get('button_receive'), callback_data: `receive:${from}`},
+        {text: lang.get('button_reject'), callback_data: `reject:${from}`}]]
       }
     });
     subs.update(condition, {actionMsgId: actionMsg.message_id});// 更新actionMsgId
@@ -195,7 +196,14 @@ export default
     let condition = subs.getMsgCondition(message);
     // 记录操作人和拒绝理由及时间
     message = subs.update(condition, { reject, reject_date: helper.getTimestamp(), reject_reason: reason })
-    let rejectText = lang.get('reject_tips', { reason });
+    let rejectText;
+    if (!reason) {
+      reason = '无理由退回'
+      rejectText = lang.get('reject_tips_noreason');
+    }
+    else {
+      rejectText = lang.get('reject_tips', { reason });
+    }
     // 获取审稿群拒绝审核文案
     let text = lang.getAdminActionReject(message, reason);
     // 编辑审稿群actionMsg
@@ -249,9 +257,23 @@ export default
    * @return {Promise}       [description]
    */
   async receive (query) {
+    console.log('receive')
     let fwdMsg = query.message.reply_to_message;// 审稿群的稿件
     let condition = subs.getFwdMsgCondition(fwdMsg);// 得到查询条件
     let message = subs.one(condition);// 得到真实稿件
     this.receiveMessage(message, query.from);
+  },
+  /**
+   * 管理员点击退回稿件(从actionMsg点击按钮)
+   * @param  {Object}  query callback data
+   * @return {Promise}       [description]
+   */
+  async reject (query) {
+    console.log('reject')
+    let reason
+    let fwdMsg = query.message.reply_to_message;// 审稿群的稿件
+    let condition = subs.getFwdMsgCondition(fwdMsg);// 得到查询条件
+    let message = subs.one(condition);// 得到真实稿件
+    this.rejectMessage(message, query.from, reason);
   }
 }

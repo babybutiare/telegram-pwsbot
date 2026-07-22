@@ -12,6 +12,7 @@ export default
       const actionMsg = query.message;// 操作的actionMsg
       const data = query.data;
       if (this.isAdminReceiveAction(data)) { await msgControl.receive(query) } 
+      else if (this.isAdminRejectAction(data)) { await msgControl.reject(query) }
       else { this.processSubmission(data, actionMsg) }
       bot.answerCallbackQuery(query.id)
     } catch (err) {
@@ -49,5 +50,8 @@ export default
    */
   isAdminReceiveAction (data) {
     return (data == vars.REC_ANY || data == vars.REC_REAL) ? true : false;
+  },
+  isAdminRejectAction (data) {
+    return (data == vars.REJ_ANY || data == vars.REJ_REAL) ? true : false;
   }
 }

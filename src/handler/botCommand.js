@@ -77,7 +77,7 @@ onText(/\/ban (.+)|\/ban/, ({msg, match, repMsg, rep}) => {
 onText(/\/no (.+)|\/no/, async ({ msg, match, rep, repMsg, chatId }) => {
   if (helper.isPrivate(msg)) { return false }
   const reason = match[1];
-  if (!reason) {throw {message: lang.get('err_reject_reason')}}// 没有理由则驳回请求
+  //if (!reason) {throw {message: lang.get('err_reject_reason')}}// 没有理由则驳回请求
   let message = subs.getMsgWithReply(repMsg);
   if (!message) { throw {message: lang.get('err_no_sub')} }// 没找到稿件
   // 若稿件已经发布，则驳回操作
